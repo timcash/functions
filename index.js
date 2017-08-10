@@ -1,7 +1,7 @@
 const rp = require('request-promise')
 const ftp_client = require('ftp')
 const fs = require('fs')
-const moment = require('moment')
+const moment = require('moment-timezone');
 const co = require('co')
 
 function log(d) {
@@ -14,7 +14,7 @@ function log(d) {
 //
 // ==============================================
 function writeToFtp(user, pass, host, port, file_prefix, data) {
-  const time = moment().format('YYYYMMDDhhmm')
+  const time = moment().tz("America/Los_Angeles").format('YYYYMMDDhhmm')
   const filename = `/Drop/${file_prefix}-${time}.xml`
   return new Promise((resolve, reject) => {
     var c = new ftp_client()
@@ -74,7 +74,7 @@ exports.transfer_jobs = co.wrap(function *(req, res) {
     res.status(400).send('No source_url defined');
   } else {
     const {user, pass, host, port, file_prefix, source_url} = req.body
-    const result = yield moveTheFileFromTheUrl(user, pass, host, port, file_prefix, source_url)
-    res.status(200).send('Success: ' + result)
+    moveTheFileFromTheUrl(user, pass, host, port, file_prefix, source_url)
+    res.status(200).send(file_prefix)
   }
 })
