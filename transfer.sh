@@ -9,4 +9,4 @@ curl -X POST -H "Content-Type: application/json" \
     "user": "my-username",
     "pass": "my-password"
 }' \
-"https://us-central1-functions-176316.cloudfunctions.net/transfer_jobs"
+"https://us-central1-zippy-elf-176405.cloudfunctions.net/transfer_jobs"

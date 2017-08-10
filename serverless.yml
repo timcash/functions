@@ -3,9 +3,9 @@ service: functions
 provider:
   name: google
   runtime: nodejs
-  project: functions-176316
+  project: zippy-elf-176405
   # the path to the credentials file needs to be absolute
-  credentials: ~/.gcloud/keyfile.json
+  credentials: ~/.gcloud/bruce_keyfile.json
 
 plugins:
   - serverless-google-cloudfunctions
