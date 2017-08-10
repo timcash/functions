@@ -14,7 +14,7 @@ function log(d) {
 //
 // ==============================================
 function writeToFtp(user, pass, host, port, file_prefix, data) {
-  const time = moment().tz("America/Los_Angeles").format('YYYYMMDDhhmm')
+  const time = moment().tz("America/Los_Angeles").format('YYYYMMDDHHmm')
   const filename = `/Drop/${file_prefix}-${time}.xml`
   return new Promise((resolve, reject) => {
     var c = new ftp_client()
