@@ -4,10 +4,7 @@ const fs = require('fs')
 const moment = require('moment-timezone');
 const co = require('co')
 
-function log(d) {
-  console.log(d)
-}
-
+const log = console.log
 // ==============================================
 //
 //                       FTP
@@ -19,16 +16,16 @@ function writeToFtp(user, pass, host, port, file_prefix, data) {
   return new Promise((resolve, reject) => {
     var c = new ftp_client()
     c.on('ready', function() {
-      log('CONNECTED')
+      log(`CONNECTED ${user}@${host}`)
       c.put(data, filename, function(err) {
         if (err) {
-          log('ERROR')
+          log(`ERROR ${filename}`)
           c.end()
           reject(err)
         } else {
-          log('COMPLETE')
+          log(`COMPLETE ${filename}`)
           c.end()
-          resolve(`file uploaded to ${filename}`)
+          resolve(`UPLOADED to ${filename}`)
         }
       })
     })
@@ -61,13 +58,16 @@ const getTheFile = co.wrap(function*(url) {
 const moveTheFileFromTheUrl = co.wrap(function*(user, pass, host, port, file_prefix, url) {
   try {
     const data = yield getTheFile(url)
+    if(data.length < 200) {
+      log(`file was too small ${file_prefix} ${data.length}`)
+      return
+    }
     const uploadResult = yield writeToFtp(user, pass, host, port, file_prefix, data)
     return uploadResult
   } catch (e) {
     return e.toString()
   }
 })
-
 
 exports.transfer_jobs = co.wrap(function *(req, res) {
   if (req.body.source_url === undefined) {
